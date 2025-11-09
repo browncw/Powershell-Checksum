@@ -8,7 +8,7 @@ $TargetDirectory = (Resolve-Path $TargetDirectory).Path
 Write-Host "Generating SHA512 hash files under: $TargetDirectory" -ForegroundColor Cyan
 
 # Recurse through all files
-Get-ChildItem -Path $TargetDirectory -File -Recurse | Where-Object { $_.Extension -ne ".sha512" } | ForEach-Object {
+Get-ChildItem -Path $TargetDirectory -File -Recurse | Where-Object { ($_.Extension -ne ".sha512") -or  (![System.IO.File]::Exists($_.FullName + ".sha512")) } | ForEach-Object {
     try {
         $file = $_.FullName
         $hash = (Get-FileHash -Algorithm SHA512 -Path $file).Hash
